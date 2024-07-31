@@ -12,6 +12,8 @@ class ContentSizeTabBarView extends StatefulWidget {
     this.controller,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
+    this.animationDuration = kTabScrollDuration,
+    this.animationCurve = Curves.ease,
   }) : super(key: key);
 
   /// This widget's selection and animation state.
@@ -39,6 +41,9 @@ class ContentSizeTabBarView extends StatefulWidget {
 
   /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
+
+  final Duration animationDuration;
+  final Curve animationCurve;
 
   @override
   State<ContentSizeTabBarView> createState() => _ContentSizeTabBarViewState();
@@ -134,8 +139,11 @@ class _ContentSizeTabBarViewState extends State<ContentSizeTabBarView> {
     final int previousIndex = _controller!.previousIndex;
     if ((_currentIndex! - previousIndex).abs() == 1) {
       _warpUnderwayCount += 1;
-      await _pageController.animateToPage(_currentIndex!,
-          duration: kTabScrollDuration, curve: Curves.ease);
+      await _pageController.animateToPage(
+        _currentIndex!,
+        duration: widget.animationDuration,
+        curve: widget.animationCurve,
+      );
       _warpUnderwayCount -= 1;
       return Future<void>.value();
     }
@@ -155,8 +163,11 @@ class _ContentSizeTabBarViewState extends State<ContentSizeTabBarView> {
     });
     _pageController.jumpToPage(initialPage);
 
-    await _pageController.animateToPage(_currentIndex!,
-        duration: kTabScrollDuration, curve: Curves.ease);
+    await _pageController.animateToPage(
+      _currentIndex!,
+      duration: widget.animationDuration,
+      curve: widget.animationCurve,
+    );
     if (!mounted) return Future<void>.value();
     setState(() {
       _warpUnderwayCount -= 1;
