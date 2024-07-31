@@ -12,7 +12,7 @@ class ContentSizeTabBarView extends StatefulWidget {
     this.controller,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
-    this.animationDuration = kTabScrollDuration,
+    this.animationDuration = const Duration(milliseconds: 300),
     this.animationCurve = Curves.ease,
   }) : super(key: key);
 
