@@ -12,8 +12,10 @@ class ContentSizeTabBarView extends StatefulWidget {
     this.controller,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
-    this.animationDuration = const Duration(milliseconds: 300),
-    this.animationCurve = Curves.ease,
+    this.pageSwitchAniDuration = const Duration(milliseconds: 300),
+    this.pageSwitchAniCurve = Curves.ease,
+    this.pageResizeAniDuration = const Duration(milliseconds: 300),
+    this.pageResizeAniCurve = Curves.ease,
   }) : super(key: key);
 
   /// This widget's selection and animation state.
@@ -42,8 +44,11 @@ class ContentSizeTabBarView extends StatefulWidget {
   /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
 
-  final Duration animationDuration;
-  final Curve animationCurve;
+  final Duration pageSwitchAniDuration;
+  final Curve pageSwitchAniCurve;
+
+  final Duration pageResizeAniDuration;
+  final Curve pageResizeAniCurve;
 
   @override
   State<ContentSizeTabBarView> createState() => _ContentSizeTabBarViewState();
@@ -141,8 +146,8 @@ class _ContentSizeTabBarViewState extends State<ContentSizeTabBarView> {
       _warpUnderwayCount += 1;
       await _pageController.animateToPage(
         _currentIndex!,
-        duration: widget.animationDuration,
-        curve: widget.animationCurve,
+        duration: widget.pageSwitchAniDuration,
+        curve: widget.pageSwitchAniCurve,
       );
       _warpUnderwayCount -= 1;
       return Future<void>.value();
@@ -165,8 +170,8 @@ class _ContentSizeTabBarViewState extends State<ContentSizeTabBarView> {
 
     await _pageController.animateToPage(
       _currentIndex!,
-      duration: widget.animationDuration,
-      curve: widget.animationCurve,
+      duration: widget.pageSwitchAniDuration,
+      curve: widget.pageSwitchAniCurve,
     );
     if (!mounted) return Future<void>.value();
     setState(() {
@@ -226,6 +231,8 @@ class _ContentSizeTabBarViewState extends State<ContentSizeTabBarView> {
         physics: widget.physics == null
             ? const PageScrollPhysics().applyTo(const ClampingScrollPhysics())
             : const PageScrollPhysics().applyTo(widget.physics),
+        animationDuration: widget.pageResizeAniDuration,
+        animationCurve: widget.pageResizeAniCurve,
         children: _childrenWithKey,
       ),
     );
